@@ -6,12 +6,13 @@
   <title>Client Portal – Aswathy Associates</title>
   <link rel="stylesheet" href="/css/style.css">
   <link rel="stylesheet" href="/css/dashboard.css">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='8' fill='%23C9A227'/%3E%3Ctext x='50%25' y='54%25' text-anchor='middle' dominant-baseline='middle' font-family='Georgia,serif' font-size='22' font-weight='bold' fill='white'%3EA%3C/text%3E%3C/svg%3E">
 </head>
 <body class="dashboard-body">
 
 <aside class="sidebar" id="sidebar">
   <div class="sidebar-header">
-    <div class="logo-icon" style="width:40px;height:40px;font-size:0.9rem;">AA</div>
+    <div class="logo-icon" style="width:40px;height:40px;font-size:0.9rem;">A</div>
     <div><strong style="font-size:0.9rem;">Client Portal</strong><br><small style="color:var(--gray-400);">Aswathy Associates</small></div>
   </div>
   <nav class="sidebar-nav">
@@ -22,7 +23,7 @@
     <a href="#" class="sidebar-link" data-tab="profile"><span>👤</span> Profile</a>
     <div style="border-top:1px solid var(--gray-200);margin:12px 0;"></div>
     <a href="/" class="sidebar-link"><span>🌐</span> Website</a>
-    <a href="/gst-calculator" class="sidebar-link"><span>🧮</span> GST Calculator</a>
+    <a href="/pages/gst-calculator.html" class="sidebar-link"><span>🧮</span> GST Calculator</a>
     <a href="#" class="sidebar-link" onclick="logout()"><span>🚪</span> Logout</a>
   </nav>
 </aside>
@@ -53,8 +54,8 @@
         <div class="panel-header"><h4>Quick Actions</h4></div>
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:8px 0;">
           <a href="#" onclick="switchTab('documents')" class="btn btn-outline" style="text-align:center;">📁 Upload Document</a>
-          <a href="/book-appointment" class="btn btn-outline" style="text-align:center;">📅 Book Appointment</a>
-          <a href="/gst-calculator" class="btn btn-outline" style="text-align:center;">🧮 GST Calculator</a>
+          <a href="/pages/appointment.html" class="btn btn-outline" style="text-align:center;">📅 Book Appointment</a>
+          <a href="/pages/gst-calculator.html" class="btn btn-outline" style="text-align:center;">🧮 GST Calculator</a>
           <a href="https://wa.me/919846560665" target="_blank" class="btn btn-outline" style="text-align:center;">💬 WhatsApp Us</a>
         </div>
       </div>
@@ -110,7 +111,7 @@
   <!-- Appointments Tab -->
   <div class="tab-content" id="tab-appointments">
     <div class="dash-panel">
-      <div class="panel-header"><h4>My Appointments</h4><a href="/book-appointment" class="btn btn-primary btn-sm">+ Book New</a></div>
+      <div class="panel-header"><h4>My Appointments</h4><a href="/pages/appointment.html" class="btn btn-primary btn-sm">+ Book New</a></div>
       <div id="myAppointments"><div class="empty-state">Loading...</div></div>
     </div>
   </div>
@@ -317,7 +318,7 @@ async function loadMyAppointments() {
           </tr>
         `).join('')}</tbody>
       </table>
-    ` : '<div class="empty-state">No appointments yet. <a href="/book-appointment" style="color:var(--emerald);">Book one now →</a></div>';
+    ` : '<div class="empty-state">No appointments yet. <a href="/pages/appointment.html" style="color:var(--emerald);">Book one now →</a></div>';
   } catch (err) {
     document.getElementById('myAppointments').innerHTML = '<div class="empty-state">Unable to load appointments</div>';
   }

@@ -6,14 +6,36 @@
   <meta name="description" content="Login to Aswathy Associates Client Portal – Access your documents, appointments, payments and more.">
   <title>Client Login – Aswathy Associates | GST & Auditing</title>
   <link rel="stylesheet" href="/css/style.css">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='8' fill='%23C9A227'/%3E%3Ctext x='50%25' y='54%25' text-anchor='middle' dominant-baseline='middle' font-family='Georgia,serif' font-size='22' font-weight='bold' fill='white'%3EA%3C/text%3E%3C/svg%3E">
 </head>
 <body>
 
 <nav class="navbar" id="navbar">
   <div class="container">
-    <a href="/" class="nav-brand"><div class="logo-icon">AA</div><div class="brand-text"><span class="brand-name">Aswathy Associates</span><span class="brand-tagline">GST & Auditing</span></div></a>
-    <div class="nav-links" id="navLinks"><a href="/">Home</a><a href="/about">About</a><a href="/services">Services</a><a href="/gst-calculator">GST Calculator</a><a href="/contact">Contact</a></div>
-    <div class="nav-actions"><a href="/login" class="btn btn-outline-white btn-sm active">Client Login</a><a href="/book-appointment" class="btn btn-gold btn-sm">Book Consultation</a><button class="nav-toggle" id="navToggle"><span></span><span></span><span></span></button></div>
+    <a href="/" class="nav-brand">
+      <div class="logo-icon">A</div>
+      <div class="brand-text">
+        <span class="brand-name">Aswathy Associates</span>
+        <span class="brand-tagline">GST & Auditing</span>
+      </div>
+    </a>
+    <div class="nav-links" id="navLinks">
+      <a href="/">Home</a>
+      <a href="/pages/about.html">About</a>
+      <a href="/pages/services.html">Services</a>
+      <a href="/pages/gst-calculator.html">GST Calculator</a>
+      <a href="/pages/contact.html">Contact</a>
+    </div>
+    <div class="nav-actions">
+      <a href="tel:+919846560665" class="nav-phone">
+        <svg viewBox="0 0 24 24"><path d="M6.62 10.79a15.05 15.05 0 006.59 6.59l2.2-2.2a1 1 0 011.01-.24 11.36 11.36 0 003.58.57 1 1 0 011 1V20a1 1 0 01-1 1A17 17 0 013 4a1 1 0 011-1h3.5a1 1 0 011 1 11.36 11.36 0 00.57 3.58 1 1 0 01-.25 1.02l-2.2 2.19z"/></svg>
+        98465 60665
+      </a>
+      <a href="/pages/login.html" class="btn-pay">Pay Online</a>
+    </div>
+    <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">
+      <span></span><span></span><span></span>
+    </button>
   </div>
 </nav>
 
@@ -21,7 +43,7 @@
   <div class="container" style="max-width:440px;">
     <div class="card fade-in" style="padding:40px;">
       <div style="text-align:center;margin-bottom:30px;">
-        <div class="logo-icon" style="width:60px;height:60px;font-size:1.3rem;margin:0 auto 16px;">AA</div>
+        <div class="logo-icon" style="width:60px;height:60px;font-size:1.3rem;margin:0 auto 16px;">A</div>
         <h2 style="margin-bottom:4px;">Welcome Back</h2>
         <p style="color:var(--gray-500);font-size:0.9rem;">Sign in to your client portal</p>
       </div>
@@ -50,11 +72,11 @@
       </form>
 
       <div style="text-align:center;margin-top:24px;padding-top:24px;border-top:1px solid var(--gray-200);">
-        <p style="font-size:0.9rem;color:var(--gray-500);">Don't have an account? <a href="/register" style="color:var(--emerald);font-weight:600;">Create Account</a></p>
+        <p style="font-size:0.9rem;color:var(--gray-500);">Don't have an account? <a href="/pages/register.html" style="color:var(--emerald);font-weight:600;">Create Account</a></p>
       </div>
 
       <div style="text-align:center;margin-top:16px;">
-        <p style="font-size:0.8rem;color:var(--gray-400);">Admin? <a href="/login" onclick="fillAdmin()" style="color:var(--gold-dark);">Use admin credentials</a></p>
+        <p style="font-size:0.8rem;color:var(--gray-400);">Admin? <a href="/pages/login.html" onclick="fillAdmin()" style="color:var(--gold-dark);">Use admin credentials</a></p>
       </div>
     </div>
   </div>
@@ -62,7 +84,47 @@
 
 <footer class="footer" style="margin-top:0;">
   <div class="container">
-    <div class="footer-bottom"><p>&copy; 2026 Aswathy Associates. All rights reserved.</p></div>
+    <div class="footer-grid">
+      <div>
+        <div class="footer-brand">
+          <div class="logo-icon">A</div>
+          <span class="brand-name">Aswathy Associates</span>
+        </div>
+        <p>Professional chartered accountant firm providing comprehensive GST, tax, audit, and compliance services for businesses across India.</p>
+      </div>
+      <div>
+        <h4>Quick Links</h4>
+        <div class="footer-links">
+          <a href="/">Home</a>
+          <a href="/pages/about.html">About Us</a>
+          <a href="/pages/services.html">Services</a>
+          <a href="/pages/gst-calculator.html">GST Calculator</a>
+          <a href="/pages/contact.html">Contact</a>
+        </div>
+      </div>
+      <div>
+        <h4>Services</h4>
+        <div class="footer-links">
+          <a href="/pages/services.html">GST Filing</a>
+          <a href="/pages/services.html">Tax Planning</a>
+          <a href="/pages/services.html">Audit & Assurance</a>
+          <a href="/pages/services.html">Company Registration</a>
+        </div>
+      </div>
+      <div>
+        <h4>Contact</h4>
+        <div class="footer-links">
+          <a href="tel:+919846560665">📞 98465 60665</a>
+          <a href="mailto:info@aswathyassociates.com">📧 Email Us</a>
+          <a href="#">📍 Bangalore, KA</a>
+          <a href="#">🕒 Mon-Sat 9AM-7PM</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2024 Aswathy Associates. All rights reserved.</p>
+      <p>Designed with ♥ by <a href="#">Aswathy Associates</a></p>
+    </div>
   </div>
 </footer>
 

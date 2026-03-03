@@ -110,6 +110,16 @@ document.addEventListener('DOMContentLoaded', function () {
   });
 
   // ============================================
+  // DOWNLOAD ITEM CLICK HANDLERS
+  // ============================================
+  document.querySelectorAll('.download-item[data-download]').forEach(function (item) {
+    item.addEventListener('click', function () {
+      const type = this.getAttribute('data-download');
+      if (type) downloadChecklist(type.replace('-checklist', '').replace('tax-calendar', 'msme'));
+    });
+  });
+
+  // ============================================
   // SMOOTH SCROLL FOR ANCHOR LINKS
   // ============================================
   document.querySelectorAll('a[href^="#"]').forEach(function (anchor) {
@@ -129,7 +139,7 @@ document.addEventListener('DOMContentLoaded', function () {
   // ============================================
   // CONTACT FORM (Home page)
   // ============================================
-  const contactForm = document.getElementById('contactFormHome');
+  const contactForm = document.getElementById('contactForm');
   if (contactForm) {
     contactForm.addEventListener('submit', async function (e) {
       e.preventDefault();
@@ -138,12 +148,13 @@ document.addEventListener('DOMContentLoaded', function () {
       btn.disabled = true;
       btn.textContent = 'Sending...';
 
+      const inputs = contactForm.querySelectorAll('input, select, textarea');
       const formData = {
-        name: document.getElementById('homeContactName')?.value?.trim(),
-        phone: document.getElementById('homeContactPhone')?.value?.trim(),
-        email: document.getElementById('homeContactEmail')?.value?.trim(),
-        service_interested: document.getElementById('homeContactService')?.value,
-        message: document.getElementById('homeContactMessage')?.value?.trim()
+        name: inputs[0]?.value?.trim(),
+        phone: inputs[1]?.value?.trim(),
+        email: inputs[2]?.value?.trim(),
+        service_interested: inputs[3]?.value,
+        message: inputs[4]?.value?.trim()
       };
 
       try {
@@ -347,7 +358,7 @@ function isLoggedIn() {
 function logout() {
   localStorage.removeItem('token');
   localStorage.removeItem('user');
-  window.location.href = '/login';
+  window.location.href = '/pages/login.html';
 }
 
 // Counter animation for hero stats
