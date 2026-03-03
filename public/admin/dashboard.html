@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard – Aswathy Associates</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/dashboard.css">
+</head>
+<body class="dashboard-body">
+
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-header">
+    <div class="logo-icon" style="width:40px;height:40px;font-size:0.9rem;">AA</div>
+    <div><strong style="font-size:0.9rem;">Aswathy Associates</strong><br><small style="color:var(--gray-400);">Admin Panel</small></div>
+  </div>
+  <nav class="sidebar-nav">
+    <a href="#" class="sidebar-link active" data-tab="overview"><span>📊</span> Dashboard</a>
+    <a href="#" class="sidebar-link" data-tab="inquiries"><span>📩</span> Inquiries</a>
+    <a href="#" class="sidebar-link" data-tab="appointments"><span>📅</span> Appointments</a>
+    <a href="#" class="sidebar-link" data-tab="documents"><span>📁</span> Documents</a>
+    <a href="#" class="sidebar-link" data-tab="payments"><span>💳</span> Payments</a>
+    <a href="#" class="sidebar-link" data-tab="clients"><span>👥</span> Clients</a>
+    <a href="#" class="sidebar-link" data-tab="services"><span>⚙️</span> Services</a>
+    <a href="#" class="sidebar-link" data-tab="blog"><span>📝</span> Blog</a>
+    <div style="border-top:1px solid var(--gray-200);margin:12px 0;"></div>
+    <a href="/" class="sidebar-link"><span>🌐</span> View Website</a>
+    <a href="#" class="sidebar-link" onclick="logout()"><span>🚪</span> Logout</a>
+  </nav>
+</aside>
+
+<main class="dashboard-main">
+  <header class="dashboard-header">
+    <div style="display:flex;align-items:center;gap:16px;">
+      <button class="sidebar-toggle" onclick="document.getElementById('sidebar').classList.toggle('open')">☰</button>
+      <h2 id="headerTitle">Dashboard</h2>
+    </div>
+    <div style="display:flex;align-items:center;gap:16px;">
+      <span style="font-size:0.85rem;color:var(--gray-500);">Welcome, <strong id="adminName">Admin</strong></span>
+      <div style="width:36px;height:36px;background:var(--primary);border-radius:50%;display:flex;align-items:center;justify-content:center;color:white;font-weight:700;font-size:0.8rem;" id="adminAvatar">A</div>
+    </div>
+  </header>
+
+  <!-- Overview Tab -->
+  <div class="tab-content active" id="tab-overview">
+    <div class="stats-grid">
+      <div class="stat-card"><div class="stat-icon" style="background:rgba(14,124,97,0.1);color:var(--emerald);">📩</div><div class="stat-info"><div class="stat-number" id="statInquiries">0</div><div class="stat-label">New Inquiries</div></div></div>
+      <div class="stat-card"><div class="stat-icon" style="background:rgba(201,162,39,0.1);color:var(--gold-dark);">📅</div><div class="stat-info"><div class="stat-number" id="statAppointments">0</div><div class="stat-label">Pending Appointments</div></div></div>
+      <div class="stat-card"><div class="stat-icon" style="background:rgba(59,130,246,0.1);color:var(--blue);">📁</div><div class="stat-info"><div class="stat-number" id="statDocuments">0</div><div class="stat-label">Documents to Review</div></div></div>
+      <div class="stat-card"><div class="stat-icon" style="background:rgba(16,185,129,0.1);color:#10b981;">💰</div><div class="stat-info"><div class="stat-number" id="statRevenue">₹0</div><div class="stat-label">Total Revenue</div></div></div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-top:24px;">
+      <div class="dash-panel">
+        <div class="panel-header"><h4>Recent Inquiries</h4><a href="#" onclick="switchTab('inquiries')">View All →</a></div>
+        <div id="recentInquiries"><div class="empty-state">Loading...</div></div>
+      </div>
+      <div class="dash-panel">
+        <div class="panel-header"><h4>Upcoming Appointments</h4><a href="#" onclick="switchTab('appointments')">View All →</a></div>
+        <div id="recentAppointments"><div class="empty-state">Loading...</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Inquiries Tab -->
+  <div class="tab-content" id="tab-inquiries">
+    <div class="dash-panel">
+      <div class="panel-header">
+        <h4>All Inquiries</h4>
+        <select class="form-control" style="width:auto;" id="inquiryFilter" onchange="loadInquiries()">
+          <option value="">All Status</option>
+          <option value="new">New</option>
+          <option value="contacted">Contacted</option>
+          <option value="resolved">Resolved</option>
+        </select>
+      </div>
+      <div style="overflow-x:auto;">
+        <table class="data-table">
+          <thead><tr><th>Name</th><th>Email</th><th>Service</th><th>Date</th><th>Status</th><th>Actions</th></tr></thead>
+          <tbody id="inquiriesTable"><tr><td colspan="6" class="empty-state">Loading...</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- Appointments Tab -->
+  <div class="tab-content" id="tab-appointments">
+    <div class="dash-panel">
+      <div class="panel-header">
+        <h4>All Appointments</h4>
+        <select class="form-control" style="width:auto;" id="aptFilter" onchange="loadAppointments()">
+          <option value="">All Status</option>
+          <option value="pending">Pending</option>
+          <option value="confirmed">Confirmed</option>
+          <option value="completed">Completed</option>
+          <option value="cancelled">Cancelled</option>
+        </select>
+      </div>
+      <div style="overflow-x:auto;">
+        <table class="data-table">
+          <thead><tr><th>Client</th><th>Service</th><th>Date</th><th>Time</th><th>Type</th><th>Status</th><th>Actions</th></tr></thead>
+          <tbody id="appointmentsTable"><tr><td colspan="7" class="empty-state">Loading...</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- Documents Tab -->
+  <div class="tab-content" id="tab-documents">
+    <div class="dash-panel">
+      <div class="panel-header">
+        <h4>Client Documents</h4>
+        <select class="form-control" style="width:auto;" id="docFilter" onchange="loadDocuments()">
+          <option value="">All Status</option>
+          <option value="uploaded">Uploaded</option>
+          <option value="under_review">Under Review</option>
+          <option value="approved">Approved</option>
+          <option value="rejected">Rejected</option>
+        </select>
+      </div>
+      <div style="overflow-x:auto;">
+        <table class="data-table">
+          <thead><tr><th>Client</th><th>File Name</th><th>Category</th><th>Uploaded</th><th>Status</th><th>Actions</th></tr></thead>
+          <tbody id="documentsTable"><tr><td colspan="6" class="empty-state">Loading...</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- Payments Tab -->
+  <div class="tab-content" id="tab-payments">
+    <div class="dash-panel">
+      <div class="panel-header"><h4>Payment History</h4></div>
+      <div style="overflow-x:auto;">
+        <table class="data-table">
+          <thead><tr><th>Invoice</th><th>Client</th><th>Service</th><th>Amount</th><th>Date</th><th>Status</th></tr></thead>
+          <tbody id="paymentsTable"><tr><td colspan="6" class="empty-state">Loading...</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- Clients Tab -->
+  <div class="tab-content" id="tab-clients">
+    <div class="dash-panel">
+      <div class="panel-header"><h4>Registered Clients</h4></div>
+      <div style="overflow-x:auto;">
+        <table class="data-table">
+          <thead><tr><th>Name</th><th>Email</th><th>Phone</th><th>Company</th><th>Joined</th><th>Status</th><th>Actions</th></tr></thead>
+          <tbody id="clientsTable"><tr><td colspan="7" class="empty-state">Loading...</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- Services Tab -->
+  <div class="tab-content" id="tab-services">
+    <div class="dash-panel">
+      <div class="panel-header"><h4>Manage Services & Pricing</h4></div>
+      <div id="servicesList"><div class="empty-state">Loading...</div></div>
+    </div>
+  </div>
+
+  <!-- Blog Tab -->
+  <div class="tab-content" id="tab-blog">
+    <div class="dash-panel">
+      <div class="panel-header"><h4>Blog Posts</h4><button class="btn btn-primary btn-sm" onclick="openBlogEditor()">+ New Post</button></div>
+      <div id="blogList"><div class="empty-state">Loading...</div></div>
+    </div>
+    <!-- Blog Editor Modal -->
+    <div class="modal" id="blogModal" style="display:none;">
+      <div class="modal-content" style="max-width:700px;">
+        <div class="modal-header"><h3 id="blogModalTitle">New Blog Post</h3><button onclick="closeBlogModal()" style="background:none;border:none;font-size:1.5rem;cursor:pointer;">×</button></div>
+        <div class="modal-body">
+          <div class="form-group"><label>Title</label><input type="text" class="form-control" id="blogTitle"></div>
+          <div class="form-group"><label>Category</label><input type="text" class="form-control" id="blogCategory" placeholder="e.g., GST, Tax Tips, Compliance"></div>
+          <div class="form-group"><label>Excerpt</label><textarea class="form-control" id="blogExcerpt" rows="2"></textarea></div>
+          <div class="form-group"><label>Content (HTML)</label><textarea class="form-control" id="blogContent" rows="10"></textarea></div>
+          <div class="form-group"><label>Tags (comma separated)</label><input type="text" class="form-control" id="blogTags"></div>
+          <div class="form-group"><label style="display:flex;align-items:center;gap:8px;cursor:pointer;"><input type="checkbox" id="blogPublished"> Publish immediately</label></div>
+        </div>
+        <div class="modal-footer"><button class="btn btn-outline" onclick="closeBlogModal()">Cancel</button><button class="btn btn-primary" onclick="saveBlogPost()" id="blogSaveBtn">Save Post</button></div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<div class="toast-container" id="toastContainer"></div>
+
+<script src="/js/app.js"></script>
+<script>
+const token = localStorage.getItem('token');
+const user = JSON.parse(localStorage.getItem('user') || '{}');
+
+// Auth check
+if (!token || (user.role !== 'admin' && user.role !== 'staff')) {
+  window.location.href = '/login';
+}
+
+document.getElementById('adminName').textContent = user.first_name || 'Admin';
+document.getElementById('adminAvatar').textContent = (user.first_name || 'A')[0].toUpperCase();
+
+// Tab navigation
+document.querySelectorAll('.sidebar-link[data-tab]').forEach(link => {
+  link.addEventListener('click', function(e) {
+    e.preventDefault();
+    switchTab(this.dataset.tab);
+  });
+});
+
+function switchTab(tab) {
+  document.querySelectorAll('.sidebar-link').forEach(l => l.classList.remove('active'));
+  document.querySelector(`.sidebar-link[data-tab="${tab}"]`)?.classList.add('active');
+  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+  document.getElementById('tab-' + tab)?.classList.add('active');
+  
+  const titles = { overview:'Dashboard', inquiries:'Inquiries', appointments:'Appointments', documents:'Documents', payments:'Payments', clients:'Clients', services:'Services', blog:'Blog' };
+  document.getElementById('headerTitle').textContent = titles[tab] || 'Dashboard';
+
+  // Load data for tab
+  if (tab === 'inquiries') loadInquiries();
+  if (tab === 'appointments') loadAppointments();
+  if (tab === 'documents') loadDocuments();
+  if (tab === 'payments') loadPayments();
+  if (tab === 'clients') loadClients();
+  if (tab === 'services') loadServices();
+  if (tab === 'blog') loadBlog();
+}
+
+// API helper
+async function api(url, options = {}) {
+  const res = await fetch(url, {
+    ...options,
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+      ...(options.headers || {})
+    }
+  });
+  return { ok: res.ok, data: await res.json() };
+}
+
+// Load dashboard stats
+async function loadDashboard() {
+  try {
+    const { data } = await api('/api/admin/stats');
+    document.getElementById('statInquiries').textContent = data.new_inquiries || 0;
+    document.getElementById('statAppointments').textContent = data.pending_appointments || 0;
+    document.getElementById('statDocuments').textContent = data.pending_documents || 0;
+    document.getElementById('statRevenue').textContent = '₹' + (data.total_revenue || 0).toLocaleString('en-IN');
+
+    // Recent inquiries
+    const inquiries = data.recent_inquiries || [];
+    document.getElementById('recentInquiries').innerHTML = inquiries.length ? inquiries.map(i => `
+      <div style="padding:12px 0;border-bottom:1px solid var(--gray-100);display:flex;justify-content:space-between;align-items:center;">
+        <div><strong style="font-size:0.9rem;">${i.name}</strong><br><small style="color:var(--gray-500);">${i.service_interested || 'General'}</small></div>
+        <span class="badge badge-${i.status === 'new' ? 'warning' : 'success'}">${i.status}</span>
+      </div>
+    `).join('') : '<div class="empty-state">No inquiries yet</div>';
+
+    // Recent appointments
+    const apts = data.recent_appointments || [];
+    document.getElementById('recentAppointments').innerHTML = apts.length ? apts.map(a => `
+      <div style="padding:12px 0;border-bottom:1px solid var(--gray-100);display:flex;justify-content:space-between;align-items:center;">
+        <div><strong style="font-size:0.9rem;">${a.name}</strong><br><small style="color:var(--gray-500);">${a.service_type} – ${new Date(a.appointment_date).toLocaleDateString('en-IN')}</small></div>
+        <span class="badge badge-${a.status === 'pending' ? 'warning' : a.status === 'confirmed' ? 'info' : 'success'}">${a.status}</span>
+      </div>
+    `).join('') : '<div class="empty-state">No appointments yet</div>';
+  } catch (err) {
+    console.log('Dashboard load error:', err);
+    document.getElementById('recentInquiries').innerHTML = '<div class="empty-state">Unable to load data</div>';
+    document.getElementById('recentAppointments').innerHTML = '<div class="empty-state">Unable to load data</div>';
+  }
+}
+
+// Inquiries
+async function loadInquiries() {
+  try {
+    const status = document.getElementById('inquiryFilter').value;
+    const { data } = await api(`/api/admin/inquiries?status=${status}`);
+    const rows = (data.inquiries || data || []);
+    document.getElementById('inquiriesTable').innerHTML = rows.length ? rows.map(i => `
+      <tr>
+        <td><strong>${i.name}</strong></td>
+        <td>${i.email}</td>
+        <td>${i.service_interested || '-'}</td>
+        <td>${new Date(i.created_at).toLocaleDateString('en-IN')}</td>
+        <td><span class="badge badge-${i.status === 'new' ? 'warning' : i.status === 'contacted' ? 'info' : 'success'}">${i.status}</span></td>
+        <td>
+          <select class="form-control" style="width:auto;padding:4px 8px;font-size:0.8rem;" onchange="updateInquiry(${i.id}, this.value)">
+            <option value="new" ${i.status==='new'?'selected':''}>New</option>
+            <option value="contacted" ${i.status==='contacted'?'selected':''}>Contacted</option>
+            <option value="resolved" ${i.status==='resolved'?'selected':''}>Resolved</option>
+          </select>
+        </td>
+      </tr>
+    `).join('') : '<tr><td colspan="6" class="empty-state">No inquiries found</td></tr>';
+  } catch (err) {
+    document.getElementById('inquiriesTable').innerHTML = '<tr><td colspan="6" class="empty-state">Unable to load</td></tr>';
+  }
+}
+
+async function updateInquiry(id, status) {
+  await api(`/api/admin/inquiries/${id}`, { method:'PUT', body:JSON.stringify({ status }) });
+  showToast('Inquiry updated');
+  loadDashboard();
+}
+
+// Appointments
+async function loadAppointments() {
+  try {
+    const status = document.getElementById('aptFilter').value;
+    const { data } = await api(`/api/admin/appointments?status=${status}`);
+    const rows = (data.appointments || data || []);
+    document.getElementById('appointmentsTable').innerHTML = rows.length ? rows.map(a => `
+      <tr>
+        <td><strong>${a.name}</strong><br><small>${a.email}</small></td>
+        <td>${a.service_type}</td>
+        <td>${new Date(a.appointment_date).toLocaleDateString('en-IN')}</td>
+        <td>${a.appointment_time}</td>
+        <td>${a.consultation_type || 'office'}</td>
+        <td><span class="badge badge-${a.status==='pending'?'warning':a.status==='confirmed'?'info':a.status==='completed'?'success':'danger'}">${a.status}</span></td>
+        <td>
+          <select class="form-control" style="width:auto;padding:4px 8px;font-size:0.8rem;" onchange="updateAppointment(${a.id}, this.value)">
+            <option value="pending" ${a.status==='pending'?'selected':''}>Pending</option>
+            <option value="confirmed" ${a.status==='confirmed'?'selected':''}>Confirmed</option>
+            <option value="completed" ${a.status==='completed'?'selected':''}>Completed</option>
+            <option value="cancelled" ${a.status==='cancelled'?'selected':''}>Cancelled</option>
+          </select>
+        </td>
+      </tr>
+    `).join('') : '<tr><td colspan="7" class="empty-state">No appointments found</td></tr>';
+  } catch (err) {
+    document.getElementById('appointmentsTable').innerHTML = '<tr><td colspan="7" class="empty-state">Unable to load</td></tr>';
+  }
+}
+
+async function updateAppointment(id, status) {
+  await api(`/api/admin/appointments/${id}`, { method:'PUT', body:JSON.stringify({ status }) });
+  showToast('Appointment updated');
+  loadDashboard();
+}
+
+// Documents
+async function loadDocuments() {
+  try {
+    const status = document.getElementById('docFilter').value;
+    const { data } = await api(`/api/admin/documents?status=${status}`);
+    const rows = (data.documents || data || []);
+    document.getElementById('documentsTable').innerHTML = rows.length ? rows.map(d => `
+      <tr>
+        <td><strong>${d.first_name || ''} ${d.last_name || ''}</strong></td>
+        <td>${d.original_name}</td>
+        <td>${d.category || '-'}</td>
+        <td>${new Date(d.created_at).toLocaleDateString('en-IN')}</td>
+        <td><span class="badge badge-${d.status==='uploaded'?'warning':d.status==='under_review'?'info':d.status==='approved'?'success':'danger'}">${d.status}</span></td>
+        <td style="display:flex;gap:6px;">
+          <a href="/api/admin/documents/download/${d.uuid}" class="btn btn-outline btn-sm" style="font-size:0.75rem;">Download</a>
+          <select class="form-control" style="width:auto;padding:4px 8px;font-size:0.75rem;" onchange="updateDocument('${d.uuid}', this.value)">
+            <option value="uploaded" ${d.status==='uploaded'?'selected':''}>Uploaded</option>
+            <option value="under_review" ${d.status==='under_review'?'selected':''}>Under Review</option>
+            <option value="approved" ${d.status==='approved'?'selected':''}>Approved</option>
+            <option value="rejected" ${d.status==='rejected'?'selected':''}>Rejected</option>
+          </select>
+        </td>
+      </tr>
+    `).join('') : '<tr><td colspan="6" class="empty-state">No documents found</td></tr>';
+  } catch (err) {
+    document.getElementById('documentsTable').innerHTML = '<tr><td colspan="6" class="empty-state">Unable to load</td></tr>';
+  }
+}
+
+async function updateDocument(uuid, status) {
+  await api(`/api/admin/documents/${uuid}`, { method:'PUT', body:JSON.stringify({ status }) });
+  showToast('Document status updated');
+}
+
+// Payments
+async function loadPayments() {
+  try {
+    const { data } = await api('/api/admin/payments');
+    const rows = (data.payments || data || []);
+    document.getElementById('paymentsTable').innerHTML = rows.length ? rows.map(p => `
+      <tr>
+        <td>${p.invoice_number || '-'}</td>
+        <td>${p.first_name || ''} ${p.last_name || ''}</td>
+        <td>${p.description || '-'}</td>
+        <td>₹${(p.amount || 0).toLocaleString('en-IN')}</td>
+        <td>${new Date(p.created_at).toLocaleDateString('en-IN')}</td>
+        <td><span class="badge badge-${p.status==='completed'?'success':p.status==='pending'?'warning':'danger'}">${p.status}</span></td>
+      </tr>
+    `).join('') : '<tr><td colspan="6" class="empty-state">No payments found</td></tr>';
+  } catch (err) {
+    document.getElementById('paymentsTable').innerHTML = '<tr><td colspan="6" class="empty-state">Unable to load</td></tr>';
+  }
+}
+
+// Clients
+async function loadClients() {
+  try {
+    const { data } = await api('/api/admin/clients');
+    const rows = (data.clients || data || []);
+    document.getElementById('clientsTable').innerHTML = rows.length ? rows.map(c => `
+      <tr>
+        <td><strong>${c.first_name} ${c.last_name}</strong></td>
+        <td>${c.email}</td>
+        <td>${c.phone || '-'}</td>
+        <td>${c.company || '-'}</td>
+        <td>${new Date(c.created_at).toLocaleDateString('en-IN')}</td>
+        <td><span class="badge badge-${c.status==='active'?'success':'danger'}">${c.status}</span></td>
+        <td>
+          <select class="form-control" style="width:auto;padding:4px 8px;font-size:0.75rem;" onchange="updateUserStatus('${c.uuid}', this.value)">
+            <option value="active" ${c.status==='active'?'selected':''}>Active</option>
+            <option value="inactive" ${c.status==='inactive'?'selected':''}>Inactive</option>
+          </select>
+        </td>
+      </tr>
+    `).join('') : '<tr><td colspan="7" class="empty-state">No clients found</td></tr>';
+  } catch (err) {
+    document.getElementById('clientsTable').innerHTML = '<tr><td colspan="7" class="empty-state">Unable to load</td></tr>';
+  }
+}
+
+async function updateUserStatus(uuid, status) {
+  await api(`/api/admin/users/${uuid}/status`, { method:'PUT', body:JSON.stringify({ status }) });
+  showToast('Client status updated');
+}
+
+// Services
+async function loadServices() {
+  try {
+    const { data } = await api('/api/services');
+    const services = (data.services || data || []);
+    document.getElementById('servicesList').innerHTML = services.length ? services.map(s => `
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:16px 0;border-bottom:1px solid var(--gray-100);">
+        <div>
+          <strong>${s.name}</strong><br>
+          <small style="color:var(--gray-500);">${s.category}</small>
+        </div>
+        <div style="display:flex;align-items:center;gap:12px;">
+          <div style="text-align:right;">
+            <div style="font-weight:700;color:var(--emerald);">₹${(s.price || 0).toLocaleString('en-IN')}</div>
+            <small style="color:var(--gray-400);">${s.price_type || 'starting'}</small>
+          </div>
+          <input type="number" class="form-control" style="width:100px;padding:6px 10px;" value="${s.price || 0}" onchange="updateServicePrice(${s.id}, this.value)">
+        </div>
+      </div>
+    `).join('') : '<div class="empty-state">No services found</div>';
+  } catch (err) {
+    document.getElementById('servicesList').innerHTML = '<div class="empty-state">Unable to load</div>';
+  }
+}
+
+async function updateServicePrice(id, price) {
+  await api(`/api/admin/services/${id}`, { method:'PUT', body:JSON.stringify({ price: parseFloat(price) }) });
+  showToast('Price updated');
+}
+
+// Blog
+let editingBlogId = null;
+
+async function loadBlog() {
+  try {
+    const { data } = await api('/api/blog');
+    const posts = (data.posts || data || []);
+    document.getElementById('blogList').innerHTML = posts.length ? posts.map(p => `
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:16px 0;border-bottom:1px solid var(--gray-100);">
+        <div>
+          <strong>${p.title}</strong><br>
+          <small style="color:var(--gray-500);">${p.category || 'General'} • ${new Date(p.created_at).toLocaleDateString('en-IN')} • ${p.views || 0} views</small>
+        </div>
+        <div style="display:flex;gap:8px;">
+          <span class="badge badge-${p.is_published ? 'success' : 'warning'}">${p.is_published ? 'Published' : 'Draft'}</span>
+          <button class="btn btn-outline btn-sm" style="font-size:0.75rem;" onclick='editBlog(${JSON.stringify(p)})'>Edit</button>
+        </div>
+      </div>
+    `).join('') : '<div class="empty-state">No blog posts yet</div>';
+  } catch (err) {
+    document.getElementById('blogList').innerHTML = '<div class="empty-state">Unable to load</div>';
+  }
+}
+
+function openBlogEditor() {
+  editingBlogId = null;
+  document.getElementById('blogModalTitle').textContent = 'New Blog Post';
+  document.getElementById('blogTitle').value = '';
+  document.getElementById('blogCategory').value = '';
+  document.getElementById('blogExcerpt').value = '';
+  document.getElementById('blogContent').value = '';
+  document.getElementById('blogTags').value = '';
+  document.getElementById('blogPublished').checked = false;
+  document.getElementById('blogModal').style.display = 'flex';
+}
+
+function editBlog(post) {
+  editingBlogId = post.id;
+  document.getElementById('blogModalTitle').textContent = 'Edit Blog Post';
+  document.getElementById('blogTitle').value = post.title || '';
+  document.getElementById('blogCategory').value = post.category || '';
+  document.getElementById('blogExcerpt').value = post.excerpt || '';
+  document.getElementById('blogContent').value = post.content || '';
+  document.getElementById('blogTags').value = (post.tags || []).join(', ');
+  document.getElementById('blogPublished').checked = !!post.is_published;
+  document.getElementById('blogModal').style.display = 'flex';
+}
+
+function closeBlogModal() {
+  document.getElementById('blogModal').style.display = 'none';
+}
+
+async function saveBlogPost() {
+  const body = {
+    title: document.getElementById('blogTitle').value,
+    category: document.getElementById('blogCategory').value,
+    excerpt: document.getElementById('blogExcerpt').value,
+    content: document.getElementById('blogContent').value,
+    tags: document.getElementById('blogTags').value.split(',').map(t => t.trim()).filter(Boolean),
+    is_published: document.getElementById('blogPublished').checked
+  };
+
+  const url = editingBlogId ? `/api/admin/blog/${editingBlogId}` : '/api/admin/blog';
+  const method = editingBlogId ? 'PUT' : 'POST';
+  await api(url, { method, body: JSON.stringify(body) });
+  
+  showToast(editingBlogId ? 'Post updated!' : 'Post created!');
+  closeBlogModal();
+  loadBlog();
+}
+
+function logout() {
+  localStorage.removeItem('token');
+  localStorage.removeItem('user');
+  window.location.href = '/login';
+}
+
+// Initial load
+loadDashboard();
+</script>
+</body>
+</html>

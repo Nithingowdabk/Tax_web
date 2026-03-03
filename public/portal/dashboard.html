@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Client Portal – Aswathy Associates</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/dashboard.css">
+</head>
+<body class="dashboard-body">
+
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-header">
+    <div class="logo-icon" style="width:40px;height:40px;font-size:0.9rem;">AA</div>
+    <div><strong style="font-size:0.9rem;">Client Portal</strong><br><small style="color:var(--gray-400);">Aswathy Associates</small></div>
+  </div>
+  <nav class="sidebar-nav">
+    <a href="#" class="sidebar-link active" data-tab="overview"><span>📊</span> Dashboard</a>
+    <a href="#" class="sidebar-link" data-tab="documents"><span>📁</span> My Documents</a>
+    <a href="#" class="sidebar-link" data-tab="appointments"><span>📅</span> Appointments</a>
+    <a href="#" class="sidebar-link" data-tab="payments"><span>💳</span> Payments</a>
+    <a href="#" class="sidebar-link" data-tab="profile"><span>👤</span> Profile</a>
+    <div style="border-top:1px solid var(--gray-200);margin:12px 0;"></div>
+    <a href="/" class="sidebar-link"><span>🌐</span> Website</a>
+    <a href="/gst-calculator" class="sidebar-link"><span>🧮</span> GST Calculator</a>
+    <a href="#" class="sidebar-link" onclick="logout()"><span>🚪</span> Logout</a>
+  </nav>
+</aside>
+
+<main class="dashboard-main">
+  <header class="dashboard-header">
+    <div style="display:flex;align-items:center;gap:16px;">
+      <button class="sidebar-toggle" onclick="document.getElementById('sidebar').classList.toggle('open')">☰</button>
+      <h2 id="headerTitle">Dashboard</h2>
+    </div>
+    <div style="display:flex;align-items:center;gap:16px;">
+      <span style="font-size:0.85rem;color:var(--gray-500);">Welcome, <strong id="userName">Client</strong></span>
+      <div style="width:36px;height:36px;background:var(--emerald);border-radius:50%;display:flex;align-items:center;justify-content:center;color:white;font-weight:700;font-size:0.8rem;" id="userAvatar">C</div>
+    </div>
+  </header>
+
+  <!-- Overview Tab -->
+  <div class="tab-content active" id="tab-overview">
+    <div class="stats-grid">
+      <div class="stat-card"><div class="stat-icon" style="background:rgba(59,130,246,0.1);color:var(--blue);">📁</div><div class="stat-info"><div class="stat-number" id="myDocCount">0</div><div class="stat-label">Documents</div></div></div>
+      <div class="stat-card"><div class="stat-icon" style="background:rgba(201,162,39,0.1);color:var(--gold-dark);">📅</div><div class="stat-info"><div class="stat-number" id="myAptCount">0</div><div class="stat-label">Appointments</div></div></div>
+      <div class="stat-card"><div class="stat-icon" style="background:rgba(14,124,97,0.1);color:var(--emerald);">💳</div><div class="stat-info"><div class="stat-number" id="myPayCount">0</div><div class="stat-label">Payments</div></div></div>
+      <div class="stat-card"><div class="stat-icon" style="background:rgba(16,185,129,0.1);color:#10b981;">✅</div><div class="stat-info"><div class="stat-number" id="myApprovedDocs">0</div><div class="stat-label">Docs Approved</div></div></div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-top:24px;">
+      <div class="dash-panel">
+        <div class="panel-header"><h4>Quick Actions</h4></div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:8px 0;">
+          <a href="#" onclick="switchTab('documents')" class="btn btn-outline" style="text-align:center;">📁 Upload Document</a>
+          <a href="/book-appointment" class="btn btn-outline" style="text-align:center;">📅 Book Appointment</a>
+          <a href="/gst-calculator" class="btn btn-outline" style="text-align:center;">🧮 GST Calculator</a>
+          <a href="https://wa.me/919846560665" target="_blank" class="btn btn-outline" style="text-align:center;">💬 WhatsApp Us</a>
+        </div>
+      </div>
+      <div class="dash-panel">
+        <div class="panel-header"><h4>Recent Activity</h4></div>
+        <div id="recentActivity"><div class="empty-state">No recent activity</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Documents Tab -->
+  <div class="tab-content" id="tab-documents">
+    <div class="dash-panel" style="margin-bottom:24px;">
+      <div class="panel-header"><h4>Upload New Document</h4></div>
+      <form id="uploadForm" onsubmit="uploadDocument(event)">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;">
+          <div class="form-group">
+            <label>Document Category</label>
+            <select class="form-control" id="docCategory">
+              <option value="identity">Identity Proof</option>
+              <option value="address">Address Proof</option>
+              <option value="financial">Financial Document</option>
+              <option value="gst">GST Related</option>
+              <option value="tax">Tax Document</option>
+              <option value="registration">Registration Document</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Description</label>
+            <input type="text" class="form-control" id="docDescription" placeholder="Brief description">
+          </div>
+        </div>
+        <div class="upload-zone" id="uploadZone">
+          <input type="file" id="docFile" accept=".pdf,.jpg,.jpeg,.png" hidden onchange="handleFileSelect(this)">
+          <div style="text-align:center;">
+            <div style="font-size:2.5rem;margin-bottom:8px;">📄</div>
+            <p style="font-weight:600;margin-bottom:4px;">Drag & drop file here or <a href="#" onclick="document.getElementById('docFile').click();return false;" style="color:var(--emerald);">browse</a></p>
+            <small style="color:var(--gray-400);">PDF, JPG or PNG – Max 10MB</small>
+          </div>
+          <div id="selectedFile" style="display:none;margin-top:12px;padding:12px;background:var(--gray-50);border-radius:8px;"></div>
+        </div>
+        <button type="submit" class="btn btn-primary btn-block" id="uploadBtn" disabled style="margin-top:16px;">Upload Document</button>
+      </form>
+    </div>
+
+    <div class="dash-panel">
+      <div class="panel-header"><h4>My Documents</h4></div>
+      <div id="myDocuments"><div class="empty-state">Loading...</div></div>
+    </div>
+  </div>
+
+  <!-- Appointments Tab -->
+  <div class="tab-content" id="tab-appointments">
+    <div class="dash-panel">
+      <div class="panel-header"><h4>My Appointments</h4><a href="/book-appointment" class="btn btn-primary btn-sm">+ Book New</a></div>
+      <div id="myAppointments"><div class="empty-state">Loading...</div></div>
+    </div>
+  </div>
+
+  <!-- Payments Tab -->
+  <div class="tab-content" id="tab-payments">
+    <div class="dash-panel">
+      <div class="panel-header"><h4>Payment History</h4></div>
+      <div id="myPayments"><div class="empty-state">Loading...</div></div>
+    </div>
+  </div>
+
+  <!-- Profile Tab -->
+  <div class="tab-content" id="tab-profile">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;">
+      <div class="dash-panel">
+        <div class="panel-header"><h4>Personal Information</h4></div>
+        <form id="profileForm" onsubmit="updateProfile(event)">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+            <div class="form-group"><label>First Name</label><input type="text" class="form-control" id="profFirstName"></div>
+            <div class="form-group"><label>Last Name</label><input type="text" class="form-control" id="profLastName"></div>
+          </div>
+          <div class="form-group"><label>Email</label><input type="email" class="form-control" id="profEmail" disabled></div>
+          <div class="form-group"><label>Phone</label><input type="tel" class="form-control" id="profPhone"></div>
+          <div class="form-group"><label>Company</label><input type="text" class="form-control" id="profCompany"></div>
+          <button type="submit" class="btn btn-primary">Save Changes</button>
+        </form>
+      </div>
+      <div class="dash-panel">
+        <div class="panel-header"><h4>Change Password</h4></div>
+        <form id="passwordForm" onsubmit="changePassword(event)">
+          <div class="form-group"><label>Current Password</label><input type="password" class="form-control" id="currentPassword"></div>
+          <div class="form-group"><label>New Password</label><input type="password" class="form-control" id="newPassword" minlength="8"></div>
+          <div class="form-group"><label>Confirm New Password</label><input type="password" class="form-control" id="confirmNewPassword"></div>
+          <button type="submit" class="btn btn-outline">Update Password</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</main>
+
+<div class="toast-container" id="toastContainer"></div>
+
+<script src="/js/app.js"></script>
+<script>
+const token = localStorage.getItem('token');
+const user = JSON.parse(localStorage.getItem('user') || '{}');
+
+if (!token) { window.location.href = '/login'; }
+
+document.getElementById('userName').textContent = user.first_name || 'Client';
+document.getElementById('userAvatar').textContent = (user.first_name || 'C')[0].toUpperCase();
+
+// Tab nav
+document.querySelectorAll('.sidebar-link[data-tab]').forEach(link => {
+  link.addEventListener('click', function(e) {
+    e.preventDefault();
+    switchTab(this.dataset.tab);
+  });
+});
+
+function switchTab(tab) {
+  document.querySelectorAll('.sidebar-link').forEach(l => l.classList.remove('active'));
+  document.querySelector(`.sidebar-link[data-tab="${tab}"]`)?.classList.add('active');
+  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+  document.getElementById('tab-' + tab)?.classList.add('active');
+  
+  const titles = { overview:'Dashboard', documents:'My Documents', appointments:'Appointments', payments:'Payments', profile:'Profile' };
+  document.getElementById('headerTitle').textContent = titles[tab] || 'Dashboard';
+
+  if (tab === 'documents') loadMyDocuments();
+  if (tab === 'appointments') loadMyAppointments();
+  if (tab === 'payments') loadMyPayments();
+  if (tab === 'profile') loadProfile();
+}
+
+async function api(url, options = {}) {
+  const res = await fetch(url, {
+    ...options,
+    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}`, ...(options.headers || {}) }
+  });
+  return { ok: res.ok, data: await res.json() };
+}
+
+// Documents upload
+let selectedFileObj = null;
+
+function handleFileSelect(input) {
+  const file = input.files[0];
+  if (!file) return;
+  selectedFileObj = file;
+  
+  const size = (file.size / 1024 / 1024).toFixed(2);
+  document.getElementById('selectedFile').style.display = 'block';
+  document.getElementById('selectedFile').innerHTML = `<strong>${file.name}</strong> <span style="color:var(--gray-500);">(${size} MB)</span>`;
+  document.getElementById('uploadBtn').disabled = false;
+}
+
+// Drag & drop
+const uploadZone = document.getElementById('uploadZone');
+if (uploadZone) {
+  uploadZone.addEventListener('dragover', e => { e.preventDefault(); uploadZone.style.borderColor = 'var(--emerald)'; });
+  uploadZone.addEventListener('dragleave', () => { uploadZone.style.borderColor = ''; });
+  uploadZone.addEventListener('drop', e => {
+    e.preventDefault();
+    uploadZone.style.borderColor = '';
+    const file = e.dataTransfer.files[0];
+    if (file) {
+      const dt = new DataTransfer();
+      dt.items.add(file);
+      document.getElementById('docFile').files = dt.files;
+      handleFileSelect(document.getElementById('docFile'));
+    }
+  });
+  uploadZone.addEventListener('click', () => document.getElementById('docFile').click());
+}
+
+async function uploadDocument(e) {
+  e.preventDefault();
+  if (!selectedFileObj) return;
+
+  const btn = document.getElementById('uploadBtn');
+  btn.disabled = true;
+  btn.textContent = 'Uploading...';
+
+  const formData = new FormData();
+  formData.append('document', selectedFileObj);
+  formData.append('category', document.getElementById('docCategory').value);
+  formData.append('description', document.getElementById('docDescription').value);
+
+  try {
+    const res = await fetch('/api/documents/upload', {
+      method: 'POST',
+      headers: { 'Authorization': `Bearer ${token}` },
+      body: formData
+    });
+    const data = await res.json();
+    if (res.ok) {
+      showToast('Document uploaded successfully!');
+      document.getElementById('uploadForm').reset();
+      document.getElementById('selectedFile').style.display = 'none';
+      selectedFileObj = null;
+      loadMyDocuments();
+    } else {
+      showToast(data.error || 'Upload failed', 'error');
+    }
+  } catch (err) {
+    showToast('Upload failed. Server may not be running.', 'error');
+  }
+
+  btn.disabled = true;
+  btn.textContent = 'Upload Document';
+}
+
+async function loadMyDocuments() {
+  try {
+    const { data } = await api('/api/documents/my');
+    const docs = data.documents || data || [];
+    document.getElementById('myDocCount').textContent = docs.length;
+    document.getElementById('myApprovedDocs').textContent = docs.filter(d => d.status === 'approved').length;
+
+    document.getElementById('myDocuments').innerHTML = docs.length ? `
+      <table class="data-table">
+        <thead><tr><th>File</th><th>Category</th><th>Uploaded</th><th>Status</th><th>Actions</th></tr></thead>
+        <tbody>${docs.map(d => `
+          <tr>
+            <td><strong>${d.original_name}</strong>${d.description ? `<br><small style="color:var(--gray-500);">${d.description}</small>` : ''}</td>
+            <td>${d.category || '-'}</td>
+            <td>${new Date(d.created_at).toLocaleDateString('en-IN')}</td>
+            <td><span class="badge badge-${d.status==='approved'?'success':d.status==='rejected'?'danger':d.status==='under_review'?'info':'warning'}">${d.status}</span></td>
+            <td><button class="btn btn-outline btn-sm" style="font-size:0.75rem;" onclick="deleteDoc('${d.uuid}')">Delete</button></td>
+          </tr>
+        `).join('')}</tbody>
+      </table>
+    ` : '<div class="empty-state">No documents uploaded yet. Upload your first document above!</div>';
+  } catch (err) {
+    document.getElementById('myDocuments').innerHTML = '<div class="empty-state">Unable to load documents</div>';
+  }
+}
+
+async function deleteDoc(uuid) {
+  if (!confirm('Are you sure you want to delete this document?')) return;
+  await api(`/api/documents/${uuid}`, { method: 'DELETE' });
+  showToast('Document deleted');
+  loadMyDocuments();
+}
+
+async function loadMyAppointments() {
+  try {
+    const { data } = await api('/api/appointments/my');
+    const apts = data.appointments || data || [];
+    document.getElementById('myAptCount').textContent = apts.length;
+
+    document.getElementById('myAppointments').innerHTML = apts.length ? `
+      <table class="data-table">
+        <thead><tr><th>Service</th><th>Date</th><th>Time</th><th>Type</th><th>Status</th></tr></thead>
+        <tbody>${apts.map(a => `
+          <tr>
+            <td><strong>${a.service_type}</strong></td>
+            <td>${new Date(a.appointment_date).toLocaleDateString('en-IN')}</td>
+            <td>${a.appointment_time}</td>
+            <td>${a.consultation_type || 'office'}</td>
+            <td><span class="badge badge-${a.status==='confirmed'?'success':a.status==='pending'?'warning':a.status==='completed'?'info':'danger'}">${a.status}</span></td>
+          </tr>
+        `).join('')}</tbody>
+      </table>
+    ` : '<div class="empty-state">No appointments yet. <a href="/book-appointment" style="color:var(--emerald);">Book one now →</a></div>';
+  } catch (err) {
+    document.getElementById('myAppointments').innerHTML = '<div class="empty-state">Unable to load appointments</div>';
+  }
+}
+
+async function loadMyPayments() {
+  try {
+    const { data } = await api('/api/payments/my');
+    const payments = data.payments || data || [];
+    document.getElementById('myPayCount').textContent = payments.length;
+
+    document.getElementById('myPayments').innerHTML = payments.length ? `
+      <table class="data-table">
+        <thead><tr><th>Invoice</th><th>Service</th><th>Amount</th><th>Date</th><th>Status</th><th>Actions</th></tr></thead>
+        <tbody>${payments.map(p => `
+          <tr>
+            <td>${p.invoice_number || '-'}</td>
+            <td>${p.description || '-'}</td>
+            <td>₹${(p.amount || 0).toLocaleString('en-IN')}</td>
+            <td>${new Date(p.created_at).toLocaleDateString('en-IN')}</td>
+            <td><span class="badge badge-${p.status==='completed'?'success':'warning'}">${p.status}</span></td>
+            <td>${p.invoice_number ? `<a href="/api/payments/invoice/${p.invoice_number}" class="btn btn-outline btn-sm" style="font-size:0.75rem;">Invoice</a>` : '-'}</td>
+          </tr>
+        `).join('')}</tbody>
+      </table>
+    ` : '<div class="empty-state">No payment records yet</div>';
+  } catch (err) {
+    document.getElementById('myPayments').innerHTML = '<div class="empty-state">Unable to load payments</div>';
+  }
+}
+
+function loadProfile() {
+  document.getElementById('profFirstName').value = user.first_name || '';
+  document.getElementById('profLastName').value = user.last_name || '';
+  document.getElementById('profEmail').value = user.email || '';
+  document.getElementById('profPhone').value = user.phone || '';
+  document.getElementById('profCompany').value = user.company || '';
+}
+
+async function updateProfile(e) {
+  e.preventDefault();
+  try {
+    const { ok, data } = await api('/api/auth/profile', {
+      method: 'PUT',
+      body: JSON.stringify({
+        first_name: document.getElementById('profFirstName').value,
+        last_name: document.getElementById('profLastName').value,
+        phone: document.getElementById('profPhone').value,
+        company: document.getElementById('profCompany').value
+      })
+    });
+    if (ok) {
+      Object.assign(user, data.user || {});
+      localStorage.setItem('user', JSON.stringify(user));
+      showToast('Profile updated!');
+    } else {
+      showToast(data.error || 'Update failed', 'error');
+    }
+  } catch (err) {
+    showToast('Update failed', 'error');
+  }
+}
+
+async function changePassword(e) {
+  e.preventDefault();
+  const newPw = document.getElementById('newPassword').value;
+  const confirmPw = document.getElementById('confirmNewPassword').value;
+  if (newPw !== confirmPw) { showToast('Passwords do not match', 'error'); return; }
+
+  try {
+    const { ok, data } = await api('/api/auth/change-password', {
+      method: 'PUT',
+      body: JSON.stringify({
+        current_password: document.getElementById('currentPassword').value,
+        new_password: newPw
+      })
+    });
+    if (ok) {
+      showToast('Password changed!');
+      document.getElementById('passwordForm').reset();
+    } else {
+      showToast(data.error || 'Failed', 'error');
+    }
+  } catch (err) {
+    showToast('Failed to change password', 'error');
+  }
+}
+
+function logout() {
+  localStorage.removeItem('token');
+  localStorage.removeItem('user');
+  window.location.href = '/login';
+}
+
+// Load initial data
+loadMyDocuments();
+loadMyAppointments();
+loadMyPayments();
+</script>
+</body>
+</html>

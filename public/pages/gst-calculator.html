@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Free online GST Calculator – Calculate CGST, SGST, IGST instantly. Supports 5%, 12%, 18%, 28% GST rates with inclusive/exclusive options.">
+  <title>GST Calculator – Aswathy Associates | Free Online Tool</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+<nav class="navbar" id="navbar">
+  <div class="container">
+    <a href="/" class="nav-brand"><div class="logo-icon">AA</div><div class="brand-text"><span class="brand-name">Aswathy Associates</span><span class="brand-tagline">GST & Auditing</span></div></a>
+    <div class="nav-links" id="navLinks"><a href="/">Home</a><a href="/about">About</a><a href="/services">Services</a><a href="/gst-calculator" class="active">GST Calculator</a><a href="/contact">Contact</a></div>
+    <div class="nav-actions"><a href="/login" class="btn btn-outline-white btn-sm">Client Login</a><a href="/book-appointment" class="btn btn-gold btn-sm">Book Consultation</a><button class="nav-toggle" id="navToggle"><span></span><span></span><span></span></button></div>
+  </div>
+</nav>
+
+<section class="page-header">
+  <div class="container">
+    <h1>GST Calculator</h1>
+    <p>Calculate GST amounts instantly — CGST, SGST & IGST breakdown</p>
+    <div class="breadcrumb"><a href="/">Home</a> <span> / </span> <span>GST Calculator</span></div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container container-sm">
+    <div class="card fade-in" style="padding:40px;">
+      <h3 style="text-align:center;margin-bottom:8px;">Calculate Your GST</h3>
+      <p style="text-align:center;color:var(--gray-500);margin-bottom:30px;">Enter the amount and select your GST rate to get instant results.</p>
+      
+      <div class="form-group">
+        <label>Amount (₹) <span class="required">*</span></label>
+        <input type="number" class="form-control" id="gstAmount" placeholder="Enter amount" min="0" step="0.01" style="font-size:1.2rem;padding:16px;">
+      </div>
+
+      <div class="form-group">
+        <label>GST Rate</label>
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:4px;">
+          <button class="gst-rate-btn" data-rate="5" onclick="selectRate(this, 5)">5%</button>
+          <button class="gst-rate-btn" data-rate="12" onclick="selectRate(this, 12)">12%</button>
+          <button class="gst-rate-btn active" data-rate="18" onclick="selectRate(this, 18)">18%</button>
+          <button class="gst-rate-btn" data-rate="28" onclick="selectRate(this, 28)">28%</button>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Calculation Type</label>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:4px;">
+          <button class="gst-type-btn active" onclick="selectType(this, 'exclusive')" id="typeExclusive">
+            <strong>GST Exclusive</strong>
+            <small style="display:block;color:var(--gray-500);font-size:0.75rem;">Add GST to amount</small>
+          </button>
+          <button class="gst-type-btn" onclick="selectType(this, 'inclusive')" id="typeInclusive">
+            <strong>GST Inclusive</strong>
+            <small style="display:block;color:var(--gray-500);font-size:0.75rem;">Extract GST from amount</small>
+          </button>
+        </div>
+      </div>
+
+      <button class="btn btn-primary btn-lg btn-block" onclick="calculateGST()" style="margin-top:10px;">Calculate GST</button>
+
+      <!-- Results -->
+      <div id="gstResult" style="display:none;margin-top:30px;">
+        <div style="border-top:2px solid var(--gray-200);padding-top:24px;">
+          <h4 style="text-align:center;margin-bottom:20px;color:var(--emerald);">Calculation Results</h4>
+          
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px;">
+            <div style="background:var(--gray-50);padding:20px;border-radius:12px;text-align:center;">
+              <div style="font-size:0.8rem;color:var(--gray-500);margin-bottom:4px;">Base Amount</div>
+              <div style="font-size:1.5rem;font-weight:700;color:var(--primary);" id="resultBase">₹0</div>
+            </div>
+            <div style="background:var(--gray-50);padding:20px;border-radius:12px;text-align:center;">
+              <div style="font-size:0.8rem;color:var(--gray-500);margin-bottom:4px;">GST Amount</div>
+              <div style="font-size:1.5rem;font-weight:700;color:var(--red);" id="resultGst">₹0</div>
+            </div>
+          </div>
+
+          <div style="background:linear-gradient(135deg,var(--primary),var(--primary-light));padding:24px;border-radius:12px;text-align:center;color:white;margin-bottom:20px;">
+            <div style="font-size:0.85rem;opacity:0.7;margin-bottom:4px;">Total Amount</div>
+            <div style="font-size:2rem;font-weight:800;" id="resultTotal">₹0</div>
+          </div>
+
+          <!-- Tax Split -->
+          <div style="margin-bottom:20px;">
+            <h5 style="margin-bottom:12px;font-size:0.9rem;color:var(--gray-600);">Tax Split (Intra-State)</h5>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+              <div style="border:1px solid var(--gray-200);padding:16px;border-radius:10px;text-align:center;">
+                <div style="font-size:0.75rem;color:var(--gray-500);">CGST (<span id="cgstRate">9</span>%)</div>
+                <div style="font-size:1.2rem;font-weight:700;color:var(--emerald);" id="resultCgst">₹0</div>
+              </div>
+              <div style="border:1px solid var(--gray-200);padding:16px;border-radius:10px;text-align:center;">
+                <div style="font-size:0.75rem;color:var(--gray-500);">SGST (<span id="sgstRate">9</span>%)</div>
+                <div style="font-size:1.2rem;font-weight:700;color:var(--emerald);" id="resultSgst">₹0</div>
+              </div>
+            </div>
+          </div>
+
+          <div style="margin-bottom:24px;">
+            <h5 style="margin-bottom:12px;font-size:0.9rem;color:var(--gray-600);">Tax Split (Inter-State)</h5>
+            <div style="border:1px solid var(--gray-200);padding:16px;border-radius:10px;text-align:center;">
+              <div style="font-size:0.75rem;color:var(--gray-500);">IGST (<span id="igstRate">18</span>%)</div>
+              <div style="font-size:1.2rem;font-weight:700;color:var(--gold-dark);" id="resultIgst">₹0</div>
+            </div>
+          </div>
+
+          <button class="btn btn-outline btn-block" onclick="downloadGSTResult()">⬇ Download Result as PDF</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Info Section -->
+    <div style="margin-top:40px;">
+      <div class="card fade-in" style="padding:30px;">
+        <h4 style="margin-bottom:16px;">About GST Rates in India</h4>
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:16px;">
+          <div style="background:var(--gray-50);padding:16px;border-radius:10px;">
+            <div style="font-weight:700;color:var(--emerald);font-size:1.3rem;">5% GST</div>
+            <p style="font-size:0.8rem;color:var(--gray-500);margin-top:4px;">Essential food items, economy hotel rooms, transport services, small restaurants</p>
+          </div>
+          <div style="background:var(--gray-50);padding:16px;border-radius:10px;">
+            <div style="font-weight:700;color:var(--blue);font-size:1.3rem;">12% GST</div>
+            <p style="font-size:0.8rem;color:var(--gray-500);margin-top:4px;">Processed foods, business class air travel, mobile phones, fertilizers</p>
+          </div>
+          <div style="background:var(--gray-50);padding:16px;border-radius:10px;">
+            <div style="font-weight:700;color:var(--gold-dark);font-size:1.3rem;">18% GST</div>
+            <p style="font-size:0.8rem;color:var(--gray-500);margin-top:4px;">Most goods & services, IT services, financial services, restaurants with AC</p>
+          </div>
+          <div style="background:var(--gray-50);padding:16px;border-radius:10px;">
+            <div style="font-weight:700;color:var(--red);font-size:1.3rem;">28% GST</div>
+            <p style="font-size:0.8rem;color:var(--gray-500);margin-top:4px;">Luxury items, automobiles, cement, aerated beverages, 5-star hotels</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="cta-section">
+  <div class="container" style="position:relative;z-index:2;">
+    <h2>Need Help with GST Compliance?</h2>
+    <p>Our experts handle GST registration, return filing, and annual compliance for 500+ businesses.</p>
+    <a href="/book-appointment" class="btn btn-gold btn-lg">Get Expert Help →</a>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-bottom"><p>&copy; 2026 Aswathy Associates. All rights reserved.</p><p><a href="tel:9846560665">9846 560 665</a> | <a href="mailto:aswathyandco@gmail.com">aswathyandco@gmail.com</a></p></div>
+  </div>
+</footer>
+
+<a href="https://wa.me/919846560665" class="whatsapp-float" target="_blank"><svg viewBox="0 0 32 32"><path d="M16.004 0h-.008C7.174 0 0 7.176 0 16c0 3.5 1.128 6.744 3.046 9.378L1.054 31.29l6.118-1.958A15.924 15.924 0 0016.004 32C24.826 32 32 24.822 32 16S24.826 0 16.004 0zm9.32 22.614c-.39 1.1-1.932 2.014-3.166 2.282-.846.18-1.95.322-5.668-1.218-4.762-1.97-7.826-6.81-8.064-7.124-.232-.314-1.904-2.536-1.904-4.836s1.204-3.432 1.632-3.9c.428-.47.934-.586 1.246-.586.312 0 .624.002.896.016.288.014.674-.11 1.054.804.39.938 1.322 3.238 1.438 3.472.116.234.194.508.038.82-.156.314-.234.508-.468.782-.234.274-.49.612-.702.822-.234.234-.478.488-.204.958.274.468 1.218 2.01 2.614 3.256 1.794 1.6 3.306 2.096 3.774 2.33.468.234.742.196 1.016-.118.274-.314 1.166-1.36 1.478-1.83.312-.468.624-.39 1.054-.234.43.156 2.728 1.286 3.196 1.52.468.234.78.352.896.546.116.194.116 1.132-.274 2.224z"/></svg></a>
+<button class="scroll-top" id="scrollTop">↑</button>
+<div class="toast-container" id="toastContainer"></div>
+
+<style>
+.gst-rate-btn {
+  padding: 14px;
+  border: 2px solid var(--gray-200);
+  border-radius: var(--radius);
+  background: var(--white);
+  font-family: var(--font-primary);
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--gray-600);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.gst-rate-btn:hover { border-color: var(--emerald); color: var(--emerald); }
+.gst-rate-btn.active { background: var(--emerald); color: var(--white); border-color: var(--emerald); }
+
+.gst-type-btn {
+  padding: 14px;
+  border: 2px solid var(--gray-200);
+  border-radius: var(--radius);
+  background: var(--white);
+  font-family: var(--font-primary);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: center;
+}
+.gst-type-btn:hover { border-color: var(--emerald); }
+.gst-type-btn.active { border-color: var(--emerald); background: rgba(14,124,97,0.05); }
+</style>
+
+<script src="/js/app.js"></script>
+<script>
+let selectedRate = 18;
+let selectedType = 'exclusive';
+
+function selectRate(btn, rate) {
+  document.querySelectorAll('.gst-rate-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  selectedRate = rate;
+  calculateGST();
+}
+
+function selectType(btn, type) {
+  document.querySelectorAll('.gst-type-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  selectedType = type;
+  calculateGST();
+}
+
+function calculateGST() {
+  const amount = parseFloat(document.getElementById('gstAmount').value);
+  if (!amount || amount <= 0) return;
+
+  let base, gst, total;
+
+  if (selectedType === 'inclusive') {
+    base = (amount * 100) / (100 + selectedRate);
+    gst = amount - base;
+    total = amount;
+  } else {
+    base = amount;
+    gst = (amount * selectedRate) / 100;
+    total = amount + gst;
+  }
+
+  const cgst = gst / 2;
+  const sgst = gst / 2;
+  const halfRate = selectedRate / 2;
+
+  document.getElementById('resultBase').textContent = '₹' + base.toFixed(2);
+  document.getElementById('resultGst').textContent = '₹' + gst.toFixed(2);
+  document.getElementById('resultTotal').textContent = '₹' + total.toFixed(2);
+  document.getElementById('resultCgst').textContent = '₹' + cgst.toFixed(2);
+  document.getElementById('resultSgst').textContent = '₹' + sgst.toFixed(2);
+  document.getElementById('resultIgst').textContent = '₹' + gst.toFixed(2);
+  document.getElementById('cgstRate').textContent = halfRate;
+  document.getElementById('sgstRate').textContent = halfRate;
+  document.getElementById('igstRate').textContent = selectedRate;
+
+  document.getElementById('gstResult').style.display = 'block';
+}
+
+function downloadGSTResult() {
+  const amount = document.getElementById('gstAmount').value;
+  if (!amount) return;
+  
+  // Create a simple text-based PDF download
+  const base = document.getElementById('resultBase').textContent;
+  const gst = document.getElementById('resultGst').textContent;
+  const total = document.getElementById('resultTotal').textContent;
+  const cgst = document.getElementById('resultCgst').textContent;
+  const sgst = document.getElementById('resultSgst').textContent;
+  const igst = document.getElementById('resultIgst').textContent;
+
+  const content = `
+GST CALCULATION RESULT
+========================
+Aswathy Associates - GST & Auditing
+Date: ${new Date().toLocaleDateString('en-IN')}
+
+Input Amount: ₹${amount}
+GST Rate: ${selectedRate}%
+Type: ${selectedType === 'inclusive' ? 'GST Inclusive' : 'GST Exclusive'}
+
+RESULTS:
+Base Amount: ${base}
+GST Amount: ${gst}
+Total Amount: ${total}
+
+TAX SPLIT (Intra-State):
+CGST (${selectedRate/2}%): ${cgst}
+SGST (${selectedRate/2}%): ${sgst}
+
+TAX SPLIT (Inter-State):
+IGST (${selectedRate}%): ${igst}
+
+========================
+Calculated by Aswathy Associates
+Phone: 9846560665, 8304844504
+Email: aswathyandco@gmail.com
+  `.trim();
+
+  const blob = new Blob([content], { type: 'text/plain' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `GST_Calculation_${Date.now()}.txt`;
+  a.click();
+  URL.revokeObjectURL(url);
+  
+  showToast('GST calculation downloaded!');
+}
+
+// Auto calculate on input change
+document.getElementById('gstAmount').addEventListener('input', function() {
+  if (this.value) calculateGST();
+});
+</script>
+</body>
+</html>

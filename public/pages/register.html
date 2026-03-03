@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Create a client account at Aswathy Associates – Access your secure portal for documents, appointments and payments.">
+  <title>Register – Aswathy Associates | GST & Auditing</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+<nav class="navbar" id="navbar">
+  <div class="container">
+    <a href="/" class="nav-brand"><div class="logo-icon">AA</div><div class="brand-text"><span class="brand-name">Aswathy Associates</span><span class="brand-tagline">GST & Auditing</span></div></a>
+    <div class="nav-links" id="navLinks"><a href="/">Home</a><a href="/about">About</a><a href="/services">Services</a><a href="/gst-calculator">GST Calculator</a><a href="/contact">Contact</a></div>
+    <div class="nav-actions"><a href="/login" class="btn btn-outline-white btn-sm">Client Login</a><a href="/book-appointment" class="btn btn-gold btn-sm">Book Consultation</a><button class="nav-toggle" id="navToggle"><span></span><span></span><span></span></button></div>
+  </div>
+</nav>
+
+<section class="section" style="min-height:85vh;display:flex;align-items:center;padding-top:100px;">
+  <div class="container" style="max-width:500px;">
+    <div class="card fade-in" style="padding:40px;">
+      <div style="text-align:center;margin-bottom:30px;">
+        <div class="logo-icon" style="width:60px;height:60px;font-size:1.3rem;margin:0 auto 16px;">AA</div>
+        <h2 style="margin-bottom:4px;">Create Account</h2>
+        <p style="color:var(--gray-500);font-size:0.9rem;">Join our client portal for easy access to all services</p>
+      </div>
+
+      <form id="registerForm" onsubmit="handleRegister(event)">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+          <div class="form-group">
+            <label>First Name <span class="required">*</span></label>
+            <input type="text" class="form-control" id="regFirstName" placeholder="First name" required>
+          </div>
+          <div class="form-group">
+            <label>Last Name <span class="required">*</span></label>
+            <input type="text" class="form-control" id="regLastName" placeholder="Last name" required>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Email Address <span class="required">*</span></label>
+          <input type="email" class="form-control" id="regEmail" placeholder="you@example.com" required>
+        </div>
+
+        <div class="form-group">
+          <label>Phone Number <span class="required">*</span></label>
+          <input type="tel" class="form-control" id="regPhone" placeholder="9846 560 665" required>
+        </div>
+
+        <div class="form-group">
+          <label>Company / Business Name</label>
+          <input type="text" class="form-control" id="regCompany" placeholder="Optional">
+        </div>
+
+        <div class="form-group">
+          <label>Password <span class="required">*</span></label>
+          <div style="position:relative;">
+            <input type="password" class="form-control" id="regPassword" placeholder="Minimum 8 characters" required minlength="8" style="padding-right:50px;">
+            <button type="button" onclick="togglePassword('regPassword', this)" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;color:var(--gray-400);cursor:pointer;font-size:0.85rem;">Show</button>
+          </div>
+          <div class="password-strength" id="passwordStrength" style="margin-top:8px;display:none;">
+            <div style="display:flex;gap:4px;margin-bottom:4px;">
+              <div class="strength-bar" id="str1"></div>
+              <div class="strength-bar" id="str2"></div>
+              <div class="strength-bar" id="str3"></div>
+              <div class="strength-bar" id="str4"></div>
+            </div>
+            <small id="strengthText" style="color:var(--gray-500);font-size:0.75rem;"></small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Confirm Password <span class="required">*</span></label>
+          <input type="password" class="form-control" id="regConfirmPassword" placeholder="Re-enter password" required>
+        </div>
+
+        <label style="display:flex;align-items:flex-start;gap:8px;margin-bottom:20px;font-size:0.85rem;cursor:pointer;">
+          <input type="checkbox" id="agreeTerms" required style="margin-top:3px;">
+          <span>I agree to the <a href="#" style="color:var(--emerald);">Terms of Service</a> and <a href="#" style="color:var(--emerald);">Privacy Policy</a></span>
+        </label>
+
+        <button type="submit" class="btn btn-primary btn-lg btn-block" id="registerBtn">Create Account</button>
+      </form>
+
+      <div style="text-align:center;margin-top:24px;padding-top:24px;border-top:1px solid var(--gray-200);">
+        <p style="font-size:0.9rem;color:var(--gray-500);">Already have an account? <a href="/login" style="color:var(--emerald);font-weight:600;">Sign In</a></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="footer" style="margin-top:0;">
+  <div class="container">
+    <div class="footer-bottom"><p>&copy; 2026 Aswathy Associates. All rights reserved.</p></div>
+  </div>
+</footer>
+
+<div class="toast-container" id="toastContainer"></div>
+
+<style>
+.strength-bar { height:4px;flex:1;background:var(--gray-200);border-radius:2px;transition:background 0.3s; }
+</style>
+
+<script src="/js/app.js"></script>
+<script>
+function togglePassword(inputId, btn) {
+  const input = document.getElementById(inputId);
+  if (input.type === 'password') { input.type = 'text'; btn.textContent = 'Hide'; }
+  else { input.type = 'password'; btn.textContent = 'Show'; }
+}
+
+// Password strength meter
+document.getElementById('regPassword').addEventListener('input', function() {
+  const pw = this.value;
+  const container = document.getElementById('passwordStrength');
+  if (!pw) { container.style.display = 'none'; return; }
+  container.style.display = 'block';
+
+  let score = 0;
+  if (pw.length >= 8) score++;
+  if (/[A-Z]/.test(pw)) score++;
+  if (/[0-9]/.test(pw)) score++;
+  if (/[^A-Za-z0-9]/.test(pw)) score++;
+
+  const colors = ['var(--red)', 'var(--red)', '#f59e0b', 'var(--emerald)'];
+  const labels = ['Weak', 'Fair', 'Good', 'Strong'];
+
+  for (let i = 1; i <= 4; i++) {
+    document.getElementById('str' + i).style.background = i <= score ? colors[score - 1] : 'var(--gray-200)';
+  }
+  document.getElementById('strengthText').textContent = labels[score - 1] || 'Too short';
+  document.getElementById('strengthText').style.color = colors[score - 1] || 'var(--gray-500)';
+});
+
+async function handleRegister(e) {
+  e.preventDefault();
+  const btn = document.getElementById('registerBtn');
+  const password = document.getElementById('regPassword').value;
+  const confirm = document.getElementById('regConfirmPassword').value;
+
+  if (password !== confirm) {
+    showToast('Passwords do not match.', 'error');
+    return;
+  }
+
+  if (password.length < 8) {
+    showToast('Password must be at least 8 characters.', 'error');
+    return;
+  }
+
+  btn.disabled = true;
+  btn.textContent = 'Creating Account...';
+
+  try {
+    const res = await fetch('/api/auth/register', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        first_name: document.getElementById('regFirstName').value.trim(),
+        last_name: document.getElementById('regLastName').value.trim(),
+        email: document.getElementById('regEmail').value.trim(),
+        phone: document.getElementById('regPhone').value.trim(),
+        company: document.getElementById('regCompany').value.trim(),
+        password
+      })
+    });
+
+    const data = await res.json();
+
+    if (res.ok) {
+      localStorage.setItem('token', data.token);
+      localStorage.setItem('user', JSON.stringify(data.user));
+      showToast('Account created successfully! Redirecting...');
+      setTimeout(() => { window.location.href = '/portal'; }, 1000);
+    } else {
+      showToast(data.error || 'Registration failed. Please try again.', 'error');
+      btn.disabled = false;
+      btn.textContent = 'Create Account';
+    }
+  } catch (err) {
+    showToast('Server not available. Please try again later.', 'error');
+    btn.disabled = false;
+    btn.textContent = 'Create Account';
+  }
+}
+</script>
+</body>
+</html>

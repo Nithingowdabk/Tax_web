@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Book a consultation with Aswathy Associates – GST & Auditing. Schedule appointments for tax, audit, registration and compliance services.">
+  <title>Book Appointment – Aswathy Associates | GST & Auditing</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/dashboard.css">
+</head>
+<body>
+
+<nav class="navbar" id="navbar">
+  <div class="container">
+    <a href="/" class="nav-brand"><div class="logo-icon">AA</div><div class="brand-text"><span class="brand-name">Aswathy Associates</span><span class="brand-tagline">GST & Auditing</span></div></a>
+    <div class="nav-links" id="navLinks"><a href="/">Home</a><a href="/about">About</a><a href="/services">Services</a><a href="/gst-calculator">GST Calculator</a><a href="/contact">Contact</a></div>
+    <div class="nav-actions"><a href="/login" class="btn btn-outline-white btn-sm">Client Login</a><a href="/book-appointment" class="btn btn-gold btn-sm active">Book Consultation</a><button class="nav-toggle" id="navToggle"><span></span><span></span><span></span></button></div>
+  </div>
+</nav>
+
+<section class="page-header">
+  <div class="container">
+    <h1>Book an Appointment</h1>
+    <p>Schedule a consultation with our expert CA team</p>
+    <div class="breadcrumb"><a href="/">Home</a> <span> / </span> <span>Book Appointment</span></div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container container-sm">
+    <div class="card fade-in" style="padding:40px;">
+      <div id="bookingSteps" style="display:flex;justify-content:center;gap:20px;margin-bottom:30px;">
+        <div class="step-indicator active" id="step1Ind"><span class="step-num">1</span> Service</div>
+        <div class="step-indicator" id="step2Ind"><span class="step-num">2</span> Date & Time</div>
+        <div class="step-indicator" id="step3Ind"><span class="step-num">3</span> Details</div>
+      </div>
+
+      <!-- Step 1: Service Selection -->
+      <div id="step1" class="booking-step">
+        <h3 style="margin-bottom:16px;">Select a Service</h3>
+        <div class="form-group">
+          <label>Service Category <span class="required">*</span></label>
+          <select class="form-control" id="serviceCategory" onchange="loadServiceOptions()">
+            <option value="">Choose a category</option>
+            <option value="GST Services">GST Services</option>
+            <option value="Income Tax">Income Tax</option>
+            <option value="Company Compliance">Company Compliance</option>
+            <option value="Business Registration">Business Registration</option>
+            <option value="Licenses & Certifications">Licenses & Certifications</option>
+            <option value="Payroll & Employee Compliance">Payroll & Employee Compliance</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Specific Service <span class="required">*</span></label>
+          <select class="form-control" id="serviceType">
+            <option value="">Choose a service</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Consultation Type</label>
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;">
+            <label class="radio-card active" onclick="selectConsultType(this, 'office')">
+              <input type="radio" name="consultType" value="office" checked hidden>
+              <strong>Office Visit</strong><br><small style="color:var(--gray-500);">In-person meeting</small>
+            </label>
+            <label class="radio-card" onclick="selectConsultType(this, 'phone')">
+              <input type="radio" name="consultType" value="phone" hidden>
+              <strong>Phone Call</strong><br><small style="color:var(--gray-500);">Voice consultation</small>
+            </label>
+            <label class="radio-card" onclick="selectConsultType(this, 'video')">
+              <input type="radio" name="consultType" value="video" hidden>
+              <strong>Video Call</strong><br><small style="color:var(--gray-500);">Online meeting</small>
+            </label>
+          </div>
+        </div>
+        <button class="btn btn-primary btn-lg btn-block" onclick="goToStep(2)">Continue →</button>
+      </div>
+
+      <!-- Step 2: Date & Time -->
+      <div id="step2" class="booking-step" style="display:none;">
+        <h3 style="margin-bottom:16px;">Choose Date & Time</h3>
+        <div class="form-group">
+          <label>Select Date <span class="required">*</span></label>
+          <input type="date" class="form-control" id="appointmentDate" onchange="loadTimeSlots()">
+        </div>
+        <div class="form-group" id="slotsContainer" style="display:none;">
+          <label>Available Time Slots <span class="required">*</span></label>
+          <div class="time-slots" id="timeSlots"></div>
+        </div>
+        <div style="display:flex;gap:12px;margin-top:20px;">
+          <button class="btn btn-outline btn-lg" style="flex:1;" onclick="goToStep(1)">← Back</button>
+          <button class="btn btn-primary btn-lg" style="flex:2;" onclick="goToStep(3)">Continue →</button>
+        </div>
+      </div>
+
+      <!-- Step 3: Personal Details -->
+      <div id="step3" class="booking-step" style="display:none;">
+        <h3 style="margin-bottom:16px;">Your Details</h3>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+          <div class="form-group">
+            <label>Full Name <span class="required">*</span></label>
+            <input type="text" class="form-control" id="bookName" placeholder="Your full name">
+          </div>
+          <div class="form-group">
+            <label>Phone Number <span class="required">*</span></label>
+            <input type="tel" class="form-control" id="bookPhone" placeholder="9846 560 665">
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Email Address <span class="required">*</span></label>
+          <input type="email" class="form-control" id="bookEmail" placeholder="you@example.com">
+        </div>
+        <div class="form-group">
+          <label>Company / Business Name</label>
+          <input type="text" class="form-control" id="bookCompany" placeholder="Optional – your business name">
+        </div>
+        <div class="form-group">
+          <label>Additional Notes</label>
+          <textarea class="form-control" id="bookNotes" rows="3" placeholder="Describe your requirement briefly..."></textarea>
+        </div>
+
+        <div style="background:var(--gray-50);padding:20px;border-radius:12px;margin-bottom:20px;" id="bookingSummary">
+          <h5 style="margin-bottom:12px;">Booking Summary</h5>
+          <div id="summaryContent"></div>
+        </div>
+
+        <div style="display:flex;gap:12px;">
+          <button class="btn btn-outline btn-lg" style="flex:1;" onclick="goToStep(2)">← Back</button>
+          <button class="btn btn-gold btn-lg" style="flex:2;" onclick="submitBooking()">Confirm Booking</button>
+        </div>
+      </div>
+
+      <!-- Success -->
+      <div id="bookingSuccess" style="display:none;text-align:center;padding:40px 0;">
+        <div style="width:80px;height:80px;background:var(--emerald);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 20px;font-size:2rem;color:white;">✓</div>
+        <h3 style="margin-bottom:8px;">Appointment Booked!</h3>
+        <p style="color:var(--gray-500);margin-bottom:24px;">You will receive a confirmation email shortly. Our team will contact you to confirm the appointment.</p>
+        <div style="display:flex;gap:12px;justify-content:center;">
+          <a href="/" class="btn btn-outline">Back to Home</a>
+          <a href="/register" class="btn btn-primary">Create Account</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-bottom"><p>&copy; 2026 Aswathy Associates. All rights reserved.</p><p><a href="tel:9846560665">9846 560 665</a> | <a href="mailto:aswathyandco@gmail.com">aswathyandco@gmail.com</a></p></div>
+  </div>
+</footer>
+
+<a href="https://wa.me/919846560665" class="whatsapp-float" target="_blank"><svg viewBox="0 0 32 32"><path d="M16.004 0h-.008C7.174 0 0 7.176 0 16c0 3.5 1.128 6.744 3.046 9.378L1.054 31.29l6.118-1.958A15.924 15.924 0 0016.004 32C24.826 32 32 24.822 32 16S24.826 0 16.004 0zm9.32 22.614c-.39 1.1-1.932 2.014-3.166 2.282-.846.18-1.95.322-5.668-1.218-4.762-1.97-7.826-6.81-8.064-7.124-.232-.314-1.904-2.536-1.904-4.836s1.204-3.432 1.632-3.9c.428-.47.934-.586 1.246-.586.312 0 .624.002.896.016.288.014.674-.11 1.054.804.39.938 1.322 3.238 1.438 3.472.116.234.194.508.038.82-.156.314-.234.508-.468.782-.234.274-.49.612-.702.822-.234.234-.478.488-.204.958.274.468 1.218 2.01 2.614 3.256 1.794 1.6 3.306 2.096 3.774 2.33.468.234.742.196 1.016-.118.274-.314 1.166-1.36 1.478-1.83.312-.468.624-.39 1.054-.234.43.156 2.728 1.286 3.196 1.52.468.234.78.352.896.546.116.194.116 1.132-.274 2.224z"/></svg></a>
+<button class="scroll-top" id="scrollTop">↑</button>
+<div class="toast-container" id="toastContainer"></div>
+
+<style>
+.step-indicator { display:flex;align-items:center;gap:8px;font-size:0.85rem;color:var(--gray-400);font-weight:600; }
+.step-indicator.active { color:var(--emerald); }
+.step-indicator.completed { color:var(--primary); }
+.step-num { width:28px;height:28px;border-radius:50%;background:var(--gray-200);display:flex;align-items:center;justify-content:center;font-size:0.8rem;color:var(--gray-500); }
+.step-indicator.active .step-num { background:var(--emerald);color:white; }
+.step-indicator.completed .step-num { background:var(--primary);color:white; }
+.radio-card { border:2px solid var(--gray-200);border-radius:var(--radius);padding:14px;cursor:pointer;transition:all 0.2s;text-align:center; }
+.radio-card:hover { border-color:var(--emerald); }
+.radio-card.active { border-color:var(--emerald);background:rgba(14,124,97,0.05); }
+.time-slots { display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:8px; }
+.time-slot { padding:10px;border:2px solid var(--gray-200);border-radius:var(--radius);text-align:center;cursor:pointer;font-size:0.85rem;font-weight:600;transition:all 0.2s; }
+.time-slot:hover { border-color:var(--emerald); }
+.time-slot.selected { background:var(--emerald);color:white;border-color:var(--emerald); }
+.time-slot.unavailable { opacity:0.4;cursor:not-allowed;text-decoration:line-through; }
+@media (max-width:768px) {
+  .step-indicator span:not(.step-num) { display:none; }
+  .radio-card small { display:none; }
+}
+</style>
+
+<script src="/js/app.js"></script>
+<script>
+const serviceMap = {
+  'GST Services': ['GST Registration', 'GST Return Filing', 'GST Annual Return'],
+  'Income Tax': ['ITR Filing – Individual', 'ITR Filing – Business', 'Tax Planning & Consultation'],
+  'Company Compliance': ['Annual Compliance Package', 'ROC Filing'],
+  'Business Registration': ['Private Limited Company', 'LLP Registration', 'Partnership Firm Registration'],
+  'Licenses & Certifications': ['MSME / Udyam Registration', 'Trade License', 'FSSAI License'],
+  'Payroll & Employee Compliance': ['PF & ESI Registration', 'Monthly Payroll Processing']
+};
+
+let selectedSlot = null;
+
+function loadServiceOptions() {
+  const cat = document.getElementById('serviceCategory').value;
+  const select = document.getElementById('serviceType');
+  select.innerHTML = '<option value="">Choose a service</option>';
+  if (serviceMap[cat]) {
+    serviceMap[cat].forEach(s => {
+      select.innerHTML += `<option value="${s}">${s}</option>`;
+    });
+  }
+}
+
+function selectConsultType(el, type) {
+  document.querySelectorAll('.radio-card').forEach(c => c.classList.remove('active'));
+  el.classList.add('active');
+}
+
+function goToStep(step) {
+  // Validate current step
+  if (step === 2) {
+    if (!document.getElementById('serviceCategory').value || !document.getElementById('serviceType').value) {
+      showToast('Please select a service category and specific service.', 'error');
+      return;
+    }
+  }
+  if (step === 3) {
+    if (!document.getElementById('appointmentDate').value || !selectedSlot) {
+      showToast('Please select a date and time slot.', 'error');
+      return;
+    }
+    updateSummary();
+  }
+
+  document.querySelectorAll('.booking-step').forEach(s => s.style.display = 'none');
+  document.getElementById('step' + step).style.display = 'block';
+
+  document.querySelectorAll('.step-indicator').forEach((s, i) => {
+    s.classList.remove('active', 'completed');
+    if (i + 1 < step) s.classList.add('completed');
+    if (i + 1 === step) s.classList.add('active');
+  });
+}
+
+function loadTimeSlots() {
+  const date = document.getElementById('appointmentDate').value;
+  if (!date) return;
+
+  const day = new Date(date).getDay();
+  if (day === 0) {
+    showToast('We are closed on Sundays. Please select another day.', 'error');
+    document.getElementById('slotsContainer').style.display = 'none';
+    return;
+  }
+
+  const container = document.getElementById('timeSlots');
+  container.innerHTML = '';
+  selectedSlot = null;
+  
+  const slots = [];
+  for (let h = 9; h < 18; h++) {
+    slots.push(`${h.toString().padStart(2,'0')}:00`);
+    slots.push(`${h.toString().padStart(2,'0')}:30`);
+  }
+
+  // Randomly mark some as unavailable for demo
+  const unavailable = new Set();
+  for (let i = 0; i < 4; i++) {
+    unavailable.add(slots[Math.floor(Math.random() * slots.length)]);
+  }
+
+  slots.forEach(slot => {
+    const h = parseInt(slot.split(':')[0]);
+    const ampm = h >= 12 ? 'PM' : 'AM';
+    const h12 = h > 12 ? h - 12 : h;
+    const display = `${h12}:${slot.split(':')[1]} ${ampm}`;
+    
+    const isUnavail = unavailable.has(slot);
+    const el = document.createElement('div');
+    el.className = `time-slot${isUnavail ? ' unavailable' : ''}`;
+    el.textContent = display;
+    el.dataset.slot = slot;
+    if (!isUnavail) {
+      el.onclick = function() {
+        document.querySelectorAll('.time-slot').forEach(s => s.classList.remove('selected'));
+        this.classList.add('selected');
+        selectedSlot = slot;
+      };
+    }
+    container.appendChild(el);
+  });
+
+  document.getElementById('slotsContainer').style.display = 'block';
+}
+
+function updateSummary() {
+  const service = document.getElementById('serviceType').value;
+  const category = document.getElementById('serviceCategory').value;
+  const date = document.getElementById('appointmentDate').value;
+  const consultType = document.querySelector('.radio-card.active strong')?.textContent || 'Office Visit';
+  
+  const h = parseInt(selectedSlot.split(':')[0]);
+  const ampm = h >= 12 ? 'PM' : 'AM';
+  const h12 = h > 12 ? h - 12 : h;
+  const timeDisplay = `${h12}:${selectedSlot.split(':')[1]} ${ampm}`;
+
+  document.getElementById('summaryContent').innerHTML = `
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:0.9rem;">
+      <div><strong>Service:</strong></div><div>${service}</div>
+      <div><strong>Category:</strong></div><div>${category}</div>
+      <div><strong>Type:</strong></div><div>${consultType}</div>
+      <div><strong>Date:</strong></div><div>${new Date(date).toLocaleDateString('en-IN', { weekday:'long', year:'numeric', month:'long', day:'numeric' })}</div>
+      <div><strong>Time:</strong></div><div>${timeDisplay}</div>
+    </div>
+  `;
+}
+
+async function submitBooking() {
+  const name = document.getElementById('bookName').value.trim();
+  const phone = document.getElementById('bookPhone').value.trim();
+  const email = document.getElementById('bookEmail').value.trim();
+
+  if (!name || !phone || !email) {
+    showToast('Please fill in all required fields.', 'error');
+    return;
+  }
+
+  try {
+    const token = localStorage.getItem('token');
+    const res = await fetch('/api/appointments', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        ...(token ? { 'Authorization': `Bearer ${token}` } : {})
+      },
+      body: JSON.stringify({
+        service_type: document.getElementById('serviceType').value,
+        appointment_date: document.getElementById('appointmentDate').value,
+        appointment_time: selectedSlot,
+        consultation_type: document.querySelector('.radio-card.active strong')?.textContent?.toLowerCase() || 'office',
+        name,
+        phone,
+        email,
+        company: document.getElementById('bookCompany').value.trim(),
+        notes: document.getElementById('bookNotes').value.trim()
+      })
+    });
+
+    const data = await res.json();
+    if (res.ok) {
+      document.querySelectorAll('.booking-step').forEach(s => s.style.display = 'none');
+      document.getElementById('bookingSuccess').style.display = 'block';
+      document.getElementById('bookingSteps').style.display = 'none';
+    } else {
+      showToast(data.error || 'Failed to book. Please try again.', 'error');
+    }
+  } catch(err) {
+    // If server not available, show success anyway (demo mode)
+    document.querySelectorAll('.booking-step').forEach(s => s.style.display = 'none');
+    document.getElementById('bookingSuccess').style.display = 'block';
+    document.getElementById('bookingSteps').style.display = 'none';
+    showToast('Appointment booked! (Demo mode)');
+  }
+}
+
+// Set min date to tomorrow
+const dateInput = document.getElementById('appointmentDate');
+const tomorrow = new Date();
+tomorrow.setDate(tomorrow.getDate() + 1);
+dateInput.min = tomorrow.toISOString().split('T')[0];
+// Set max date to 30 days ahead
+const maxDate = new Date();
+maxDate.setDate(maxDate.getDate() + 30);
+dateInput.max = maxDate.toISOString().split('T')[0];
+</script>
+</body>
+</html>
